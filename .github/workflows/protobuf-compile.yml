@@ -1,0 +1,76 @@
+name: Protobuf Compile
+on:
+  create:
+    tags:
+      - v*
+      
+jobs:
+  compile-go:
+    name: Compile for Golang
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+      - name: Go Env Setup
+        run: |
+          export GOPATH=$HOME/go
+          export GOBIN=$(go env GOPATH)/bin
+          export PATH=$PATH:$GOPATH
+          export PATH=$PATH:$GOBIN
+          export GO111MODULE=on
+      - name: Install Protobuf compiler
+        run: |
+          sudo apt-get install -y protobuf-compiler
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          protoc --version 
+      - name: Checkout Protobuf event defs
+        uses: actions/checkout@v2
+      - name: Compile
+        run: protoc --go_out=./ *.proto
+      - name: Upload Golang artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: golang-events
+          path: ./*.pb.go
+          retention-days: 1
+
+  deploy-go:
+    name: Update Golang Events
+    runs-on: ubuntu-latest
+    needs: compile-go
+    continue-on-error: true
+    env:
+      GOLANG_EVENTS_REPO: ${{ secrets.TARGET_REPO }}
+    steps:
+      - name: Set version tag
+        id: release
+        run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\/}
+      - name: Checkout Golang events lib
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.GOLANG_EVENTS_REPO }}
+          ref: main
+      - name: Download Golang events
+        uses: actions/download-artifact@v2
+        with:
+          name: golang-events
+      - name: Check for Changes
+        run: |
+          git add -N .
+          ! git diff --quiet
+      - name: Update Repository
+        if: ${{ success() }}
+        env:
+          REPO_KEY: ${{ secrets.PUSH_TOKEN }}
+          USERNAME: ${{ secrets.PUSH_USER }}
+          EMAIL: ${{ secrets.PUSH_EMAIL }}
+        run: |
+          git config --global user.name $USERNAME
+          git config --global user.email $EMAIL
+          git add -A
+          git commit -am "Updated by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+          git tag ${{ steps.release.outputs.tag }}
+          git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+          git push --force --tags "https://$USERNAME:$REPO_KEY@github.com/$GOLANG_EVENTS_REPO" main:main
