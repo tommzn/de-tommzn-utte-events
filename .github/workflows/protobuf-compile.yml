@@ -60,12 +60,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: golang-events
-      - name: Check for Changes
-        run: |
-          git add -N .
-          ! git diff --quiet
       - name: Update Repository
-        if: ${{ success() }}
         env:
           REPO_KEY: ${{ secrets.PUSH_TOKEN }}
           USERNAME: ${{ secrets.PUSH_USER }}
@@ -79,7 +74,7 @@ jobs:
           git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
           git push --force --tags "https://$USERNAME:$REPO_KEY@github.com/$GOLANG_EVENTS_REPO" main:main
       - name: Create Release
-        id: create_release
+        if: ${{ success() }}
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PUSH_TOKEN }}
