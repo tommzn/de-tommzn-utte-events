@@ -14,20 +14,7 @@ message Meta {
     // Sender of a message.
     string  Source                      = 2;
     
-    // Type of a message.
-    MessageType Type                    = 3;
-
     // Timestamp a message has been created at.
-    google.protobuf.Timestamp Timestamp = 4;    
+    google.protobuf.Timestamp Timestamp = 3;    
 
-}
-
-
-// Message types.
-enum MessageType {
-
-    // Messages for development and testing.
-    Ping     = 0;
-    Pong     = 1;
-    
 }
