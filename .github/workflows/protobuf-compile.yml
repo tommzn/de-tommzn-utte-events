@@ -1,8 +1,8 @@
 name: Protobuf Compile
 on:
-  create:
-    tags:
-      - v*
+  push:
+    branches:
+      - main
       
 jobs:
   compile-go:
@@ -37,6 +37,10 @@ jobs:
           retention-days: 1
 
   deploy-go:
+    on:
+      create:
+        tags:
+          - v*
     name: Update Golang Events
     runs-on: ubuntu-latest
     needs: compile-go
