@@ -11,7 +11,7 @@ message Ping {
     
     Meta Meta               = 1;
 
-    string  DestinationId   = 2:
+    string  DestinationId   = 2;
 }
 
 // Pong development message
@@ -19,5 +19,5 @@ message Pong {
     
     Meta Meta               = 1;
 
-    string  DestinationId   = 2:
+    string  DestinationId   = 2;
 }
