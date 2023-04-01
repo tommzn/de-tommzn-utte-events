@@ -27,7 +27,7 @@ message Meta {
 enum MessageType {
 
     // Messages for development and testing.
-    Ping     = 1;
-    Pong     = 2;
+    Ping     = 0;
+    Pong     = 1;
     
 }
