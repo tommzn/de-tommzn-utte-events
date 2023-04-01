@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+  create:
+    tags:
+      - v*
       
 jobs:
   compile-go:
