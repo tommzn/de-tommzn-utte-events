@@ -1,0 +1,33 @@
+syntax = "proto3";
+package events;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = ".;events";
+
+// Meta data of messages.
+message Meta {
+    
+    // Id of a message.
+    string Id                           = 1;
+
+    // Sender of a message.
+    string  Source                      = 2;
+    
+    // Type of a message.
+    MessageType Type                    = 3;
+
+    // Timestamp a message has been created at.
+    google.protobuf.Timestamp Timestamp = 4;    
+
+}
+
+
+// Message types.
+enum MessageType {
+
+    // Messages for development and testing.
+    Ping     = 1;
+    Pong     = 2;
+    
+}

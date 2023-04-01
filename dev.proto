@@ -1,0 +1,23 @@
+syntax = "proto3";
+package events;
+
+import "google/protobuf/timestamp.proto";
+import "meta.proto";
+
+option go_package = ".;events";
+
+// Ping development message
+message Ping {
+    
+    Meta Meta               = 1;
+
+    string  DestinationId   = 2:
+}
+
+// Pong development message
+message Pong {
+    
+    Meta Meta               = 1;
+
+    string  DestinationId   = 2:
+}
