@@ -2,6 +2,7 @@ name: Protobuf Compile
 on:
   push:
     branches:
+      - '*'
       - '!main'
  
 jobs:
