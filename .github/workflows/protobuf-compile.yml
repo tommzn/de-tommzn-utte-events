@@ -7,6 +7,6 @@ on:
  
 jobs:
   go-image-build:
-    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.26
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.27
     secrets:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
