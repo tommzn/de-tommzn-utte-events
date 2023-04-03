@@ -1,8 +1,5 @@
 name: Protobuf Compile
 on:
-  push:
-    branches:
-      - '*'
   create:
     tags:
       - v*
