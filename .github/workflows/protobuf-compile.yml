@@ -7,7 +7,7 @@ on:
  
 jobs:
   go-image-build:
-    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.41
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.42
     secrets:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
       slack-channel: ${{ secrets.SLACK_CHANNEL }}
