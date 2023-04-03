@@ -15,7 +15,7 @@ jobs:
 
   
   notify-test:
-    name: Update Golang Events
+    name: Notify Slack
     runs-on: ubuntu-latest
     steps:
       - name: Post to a Slack channel
@@ -37,4 +37,4 @@ jobs:
               ]
             }
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
