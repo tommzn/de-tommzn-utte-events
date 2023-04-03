@@ -11,4 +11,4 @@ jobs:
     secrets:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
       slack-channel: ${{ secrets.SLACK_CHANNEL }}
-      slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+      slack-bottoken: ${{ secrets.SLACK_BOT_TOKEN }}
