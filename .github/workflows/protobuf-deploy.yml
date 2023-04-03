@@ -77,7 +77,7 @@ jobs:
         if: failure()
         uses: slackapi/slack-github-action@v1.23.0
         with:
-          channel-id: ${{ secrets.slack-channel }}
+          channel-id: ${{ secrets.SLACK_CHANNEL }}
           payload: |
             {
               "text": "Protobuf Deployment: ${{ job.status }}",
@@ -121,7 +121,7 @@ jobs:
         if: success()
         uses: slackapi/slack-github-action@v1.23.0
         with:
-          channel-id: ${{ secrets.slack-channel }}
+          channel-id: ${{ secrets.SLACK_CHANNEL }}
           payload: |
             {
               "text": "Protobuf Deployment: ${{ job.status }}",
