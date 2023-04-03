@@ -6,10 +6,12 @@ on:
       
 jobs:
   compile-go:
-    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.with.upload.yml@v1.0.35
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.with.upload.yml@v1.0.36
     secrets:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
-    inputs:
+      slack-channel: ${{ secrets.SLACK_CHANNEL }}
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+    with:
       upload-artifact: true
 
   deploy-go:
