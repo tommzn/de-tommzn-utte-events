@@ -28,9 +28,9 @@ jobs:
               "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
               "blocks": [
                 {
-                  "type": "title",
+                  "type": "section",
                   "text": {
-                    "type": "mrkdwn",
+                    "type": "title",
                     "text": "Protobuf Compile: ${{ job.status }}"
                   }
                 },
