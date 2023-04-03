@@ -25,13 +25,13 @@ jobs:
           channel-id: ${{ secrets.SLACK_CHANNEL }}
           payload: |
             {
-              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "text": "Protobuf Compile: ${{ job.status }}",
               "blocks": [
                 {
-                  "type": "section",
+                  "type": "header",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "#Protobuf Compile: ${{ job.status }}"
+                    "text": ":white_check_mark: Protobuf Compile: ${{ job.status }}"
                   }
                 },
                 {
