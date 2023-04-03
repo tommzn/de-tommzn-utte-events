@@ -6,35 +6,11 @@ on:
       
 jobs:
   compile-go:
-    name: Compile for Golang
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.19
-      - name: Go Env Setup
-        run: |
-          export GOPATH=$HOME/go
-          export GOBIN=$(go env GOPATH)/bin
-          export PATH=$PATH:$GOPATH
-          export PATH=$PATH:$GOBIN
-          export GO111MODULE=on
-      - name: Install Protobuf compiler
-        run: |
-          sudo apt-get install -y protobuf-compiler
-          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-          protoc --version 
-      - name: Checkout Protobuf event defs
-        uses: actions/checkout@v2
-      - name: Compile
-        run: protoc --go_out=./ *.proto
-      - name: Upload Golang artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: golang-events
-          path: ./*.pb.go
-          retention-days: 1
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.with.upload.yml@v1.0.35
+    secrets:
+      cr-pat: ${{ secrets.PUSH_TOKEN }}
+    inputs:
+      upload-artifact: true
 
   deploy-go:
     name: Update Golang Events
