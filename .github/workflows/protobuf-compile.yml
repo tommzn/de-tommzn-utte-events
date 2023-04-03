@@ -12,3 +12,10 @@ jobs:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
       slack-channel: ${{ secrets.SLACK_CHANNEL }}
       slack-bottoken: ${{ secrets.SLACK_BOT_TOKEN }}
+
+  test-ci:
+    name: Update Golang Events
+    runs-on: ubuntu-latest
+    steps:
+      - name: Env
+        run: echo ${{ github }}
