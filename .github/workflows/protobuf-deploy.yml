@@ -60,3 +60,91 @@ jobs:
             Release ${{ steps.release.outputs.tag }} (auto generated)
           draft: false
           prerelease: false
+      - name: Send Slack Message (Failed)
+        if: failure()
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: ${{ secrets.slack-channel }}
+          payload: |
+            {
+              "text": "Protobuf Deployment: ${{ job.status }}",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":red_circle:  Protobuf Deployment: ${{ job.status }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ github.ref_type }}: ${{ github.ref_name }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View at GitHub Actions> | <${{ github.event.head_commit.url }}|Commit: ${{ github.event.head_commit.id }}>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.slack-bottoken }}
+      - name: Send Slack Message (Success)
+        if: success()
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: ${{ secrets.slack-channel }}
+          payload: |
+            {
+              "text": "Protobuf Deployment: ${{ job.status }}",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":tada:  Protobuf Deployment: ${{ job.status }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ github.ref_type }}: ${{ github.ref_name }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View at GitHub Actions> | <${{ github.event.head_commit.url }}|Commit: ${{ github.event.head_commit.id }}>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.slack-bottoken }}
