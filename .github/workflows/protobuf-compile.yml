@@ -16,7 +16,6 @@ jobs:
   
   notify-test:
     name: Update Golang Events
-    if: github.event_name == 'create' && contains(github.ref, '/tags/v')
     runs-on: ubuntu-latest
     steps:
       - name: Post to a Slack channel
