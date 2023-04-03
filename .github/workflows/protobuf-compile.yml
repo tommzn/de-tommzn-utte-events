@@ -19,4 +19,6 @@ jobs:
     steps:
       - name: Env
         run: |
-          echo "github.event.commits.id: ${{ github.event.commits.id }}"
+          echo "github.sha: ${{ github.sha }}"
+          echo "github.event.commits.id: ${{ github.event.commits[0].id }}"
+
