@@ -6,39 +6,16 @@ on:
       
 jobs:
   compile-go:
-    name: Compile for Golang
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.19
-      - name: Go Env Setup
-        run: |
-          export GOPATH=$HOME/go
-          export GOBIN=$(go env GOPATH)/bin
-          export PATH=$PATH:$GOPATH
-          export PATH=$PATH:$GOBIN
-          export GO111MODULE=on
-      - name: Install Protobuf compiler
-        run: |
-          sudo apt-get install -y protobuf-compiler
-          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-          protoc --version 
-      - name: Checkout Protobuf event defs
-        uses: actions/checkout@v2
-      - name: Compile
-        run: protoc --go_out=./ *.proto
-      - name: Upload Golang artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: golang-events
-          path: ./*.pb.go
-          retention-days: 1
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.44
+    secrets:
+      cr-pat: ${{ secrets.PUSH_TOKEN }}
+      slack-channel: ${{ secrets.SLACK_CHANNEL }}
+      slack-bottoken: ${{ secrets.SLACK_BOT_TOKEN }}
+    with:
+      upload-artifact: true
 
   deploy-go:
     name: Update Golang Events
-    if: github.event_name == 'create' && contains(github.ref, '/tags/v')
     runs-on: ubuntu-latest
     needs: compile-go
     continue-on-error: true
@@ -57,9 +34,13 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: golang-events
-      - name: Update Repository
+      - name: Check for Changes
+        run: |
+          git add -N .
+          ! git diff --quiet
+      - name: Add Changes
+        if: ${{ success() }}
         env:
-          REPO_KEY: ${{ secrets.PUSH_TOKEN }}
           USERNAME: ${{ secrets.PUSH_USER }}
           EMAIL: ${{ secrets.PUSH_EMAIL }}
         run: |
@@ -67,6 +48,12 @@ jobs:
           git config --global user.email $EMAIL
           git add -A
           git commit -am "Updated by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+      - name: Update Repository
+        env:
+          REPO_KEY: ${{ secrets.PUSH_TOKEN }}
+          USERNAME: ${{ secrets.PUSH_USER }}
+          EMAIL: ${{ secrets.PUSH_EMAIL }}
+        run: |
           git tag ${{ steps.release.outputs.tag }}
           git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
           git push --force --tags "https://$USERNAME:$REPO_KEY@github.com/$GOLANG_EVENTS_REPO" main:main
@@ -82,3 +69,91 @@ jobs:
             Release ${{ steps.release.outputs.tag }} (auto generated)
           draft: false
           prerelease: false
+      - name: Send Slack Message (Failed)
+        if: failure()
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL }}
+          payload: |
+            {
+              "text": "Protobuf Deployment: ${{ job.status }}",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":red_circle:  Protobuf Deployment: ${{ job.status }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ github.ref_type }}: ${{ github.ref_name }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View at GitHub Actions> | <${{ github.event.head_commit.url }}|Commit: ${{ github.event.head_commit.id }}>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      - name: Send Slack Message (Success)
+        if: success()
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL }}
+          payload: |
+            {
+              "text": "Protobuf Deployment: ${{ job.status }}",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":tada:  Protobuf Deployment: ${{ job.status }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ github.ref_type }}: ${{ github.ref_name }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View at GitHub Actions> | <${{ github.event.head_commit.url }}|Commit: ${{ github.event.head_commit.id }}>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
