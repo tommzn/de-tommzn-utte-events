@@ -7,48 +7,8 @@ on:
  
 jobs:
   go-image-build:
-    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.38
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.40
     secrets:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
       slack-channel: ${{ secrets.SLACK_CHANNEL }}
       slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
-
-  
-  notify-test:
-    name: Notify Slack
-    runs-on: ubuntu-latest
-    steps:
-      - name: Post to a Slack channel
-        id: slack
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          channel-id: ${{ secrets.SLACK_CHANNEL }}
-          payload: |
-            {
-              "text": "Protobuf Compile: ${{ job.status }}",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":white_check_mark: Protobuf Compile: ${{ job.status }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Ref: ${{ github.ref }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "GitHub Action: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
