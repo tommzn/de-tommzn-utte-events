@@ -19,7 +19,7 @@ jobs:
 
   deploy-go:
     name: Update Golang Events
-    if: github.event_name == 'create' && contains(github.ref, '/tags/v')
+    #if: github.event_name == 'create' && contains(github.ref, '/tags/v')
     runs-on: ubuntu-latest
     needs: compile-go
     continue-on-error: true
