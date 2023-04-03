@@ -30,8 +30,8 @@ jobs:
                 {
                   "type": "section",
                   "text": {
-                    "type": "title",
-                    "text": "Protobuf Compile: ${{ job.status }}"
+                    "type": "mrkdwn",
+                    "text": "#Protobuf Compile: ${{ job.status }}"
                   }
                 },
                 {
