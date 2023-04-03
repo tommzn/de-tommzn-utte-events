@@ -19,6 +19,4 @@ jobs:
     steps:
       - name: Env
         run: |
-          echo "github.ref: ${{ github.ref }}"
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "github.ref_type: ${{ github.ref_type }}"
+          echo "github.event.commits.id: ${{ github.event.commits.id }}"
