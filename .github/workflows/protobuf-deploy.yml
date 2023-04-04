@@ -57,7 +57,7 @@ jobs:
           name: ${{ steps.release.outputs.tag }}
           body: |
             Release ${{ steps.release.outputs.tag }} (auto generated)
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PUSH_TOKEN }}
       - name: Slack Notify
         if: always()
         uses: rtCamp/action-slack-notify@v2
