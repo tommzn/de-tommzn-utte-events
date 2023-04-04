@@ -53,6 +53,8 @@ jobs:
         with:
           draft: false
           prerelease: false
+          tag: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           body: |
             Release ${{ github.ref_name }} (auto generated)
           token: ${{ secrets.PUSH_TOKEN }}
