@@ -1,4 +1,4 @@
-name: Protobuf Compile
+name: Protobuf Deployment
 on:
   create:
     tags:
@@ -78,3 +78,5 @@ jobs:
           SLACK_TITLE: "Protobuf Deployment: ${{ job.status }}"
           SLACK_USERNAME: ${{ github.actor }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_FOOTER: "${{ github.ref_type }}: ${{ github.ref_name }}"
+          MSG_MINIMAL: event,actions url,commit 
