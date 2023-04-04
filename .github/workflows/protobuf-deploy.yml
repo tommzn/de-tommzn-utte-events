@@ -6,11 +6,11 @@ on:
       
 jobs:
   compile-go:
-    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.44
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.45
     secrets:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
       slack-channel: ${{ secrets.SLACK_CHANNEL }}
-      slack-bottoken: ${{ secrets.SLACK_BOT_TOKEN }}
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
     with:
       upload-artifact: true
 
@@ -69,91 +69,12 @@ jobs:
             Release ${{ steps.release.outputs.tag }} (auto generated)
           draft: false
           prerelease: false
-      - name: Send Slack Message (Failed)
-        if: failure()
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          channel-id: ${{ secrets.SLACK_CHANNEL }}
-          payload: |
-            {
-              "text": "Protobuf Deployment: ${{ job.status }}",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":red_circle:  Protobuf Deployment: ${{ job.status }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ github.ref_type }}: ${{ github.ref_name }}"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View at GitHub Actions> | <${{ github.event.head_commit.url }}|Commit: ${{ github.event.head_commit.id }}>"
-                  }
-                }
-              ]
-            }
+      - name: Slack Notify
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      - name: Send Slack Message (Success)
-        if: success()
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          channel-id: ${{ secrets.SLACK_CHANNEL }}
-          payload: |
-            {
-              "text": "Protobuf Deployment: ${{ job.status }}",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":tada:  Protobuf Deployment: ${{ job.status }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ github.ref_type }}: ${{ github.ref_name }}"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View at GitHub Actions> | <${{ github.event.head_commit.url }}|Commit: ${{ github.event.head_commit.id }}>"
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_TITLE: "Protobuf Deployment: ${{ job.status }}"
+          SLACK_USERNAME: ${{ github.actor }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
