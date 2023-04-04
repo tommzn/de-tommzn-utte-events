@@ -6,7 +6,7 @@ on:
       
 jobs:
   compile-go:
-    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.48
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.49
     secrets:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
       slack-channel: ${{ secrets.SLACK_CHANNEL }}
@@ -77,6 +77,6 @@ jobs:
           SLACK_COLOR: ${{ job.status }}
           SLACK_TITLE: "Protobuf Deployment"
           SLACK_MESSAGE: "${{ job.status }} on protobuf deployment for ${{ github.ref_type }}: ${{ github.ref_name }}"
-          SLACK_USERNAME: ${{ github.actor }}
+          SLACK_USERNAME: "GitHub Notifications"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           MSG_MINIMAL: event,actions url,commit 
