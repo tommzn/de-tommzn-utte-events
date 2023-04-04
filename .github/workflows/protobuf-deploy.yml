@@ -7,6 +7,12 @@ on:
       - '*'
             
 jobs:
+  env:  
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Event Type: ${{ github.event.type }}"
+    
   compile-go:
     uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.49
     secrets:
