@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "Event Type: ${{ github.event.type }}"
+          echo "Event Action: ${{ github.event.action }}"
     
   compile-go:
     uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.49
