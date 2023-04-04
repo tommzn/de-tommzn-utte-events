@@ -7,8 +7,8 @@ on:
  
 jobs:
   compile-go:
-    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.44
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.49
     secrets:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
       slack-channel: ${{ secrets.SLACK_CHANNEL }}
-      slack-bottoken: ${{ secrets.SLACK_BOT_TOKEN }}
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK }}

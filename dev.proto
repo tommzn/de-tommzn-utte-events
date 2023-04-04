@@ -1,7 +1,6 @@
 syntax = "proto3";
 package events;
 
-import "google/protobuf/timestamp.proto";
 import "meta.proto";
 
 option go_package = ".;events";
