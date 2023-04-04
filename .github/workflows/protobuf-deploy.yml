@@ -55,6 +55,8 @@ jobs:
           prerelease: false
           tag: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
+          generateReleaseNotes: true
+          makeLatest: true
           body: |
             Release ${{ github.ref_name }} (auto generated)
           token: ${{ secrets.PUSH_TOKEN }}
