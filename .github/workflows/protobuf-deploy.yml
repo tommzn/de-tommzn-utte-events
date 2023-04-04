@@ -43,7 +43,7 @@ jobs:
           git config --global user.name $USERNAME
           git config --global user.email $EMAIL
           git add -A
-          git commit -am "Updated by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+          git commit --allow-empty -am "Updated by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
           git tag ${{ steps.release.outputs.tag }}
           git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
           git push --force --tags "https://$USERNAME:$REPO_KEY@github.com/$GOLANG_EVENTS_REPO" main:main
