@@ -55,7 +55,7 @@ jobs:
           prerelease: false
           body: "Release ${{ github.ref_name }} (auto generated)"
           token: ${{ secrets.PUSH_TOKEN }}
-          repo: ${{ secrets.TARGET_REPO }}
+          repo: "https://github.com/${{ secrets.TARGET_REPO }}"
       - name: Slack Notify
         if: always()
         uses: rtCamp/action-slack-notify@v2
