@@ -22,8 +22,6 @@ jobs:
     env:
       GOLANG_EVENTS_REPO: ${{ secrets.TARGET_REPO }}
     steps:
-      - run: |
-          echo "Repo: ${{ github.repository }}"
       - name: Set version tag
         id: release
         run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\/}
@@ -57,7 +55,7 @@ jobs:
           prerelease: false
           body: "Release ${{ github.ref_name }} (auto generated)"
           token: ${{ secrets.PUSH_TOKEN }}
-          repo: "tommzn/de-tommzn-utte-events-go"
+          repo: ${{ env.GOLANG_EVENTS_REPO }}
       - name: Slack Notify
         if: always()
         uses: rtCamp/action-slack-notify@v2
