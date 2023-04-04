@@ -1,19 +1,10 @@
 name: Protobuf Deployment
 on:
-  create:
+  push:
     tags:
-      - 'v*'
-    branches-ignore:
-      - '*'
-            
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
 jobs:
-  env:  
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "Event Action: ${{ github.event_name }}"
-          echo "Event Type: ${{ github.event_path }}"
-          
   compile-go:
     uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.49
     secrets:
