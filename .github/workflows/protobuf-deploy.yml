@@ -22,6 +22,8 @@ jobs:
     env:
       GOLANG_EVENTS_REPO: ${{ secrets.TARGET_REPO }}
     steps:
+      - run: |
+          echo "Repo: ${{ github.repository }}"
       - name: Set version tag
         id: release
         run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\/}
