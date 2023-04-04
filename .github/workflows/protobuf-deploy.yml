@@ -6,7 +6,7 @@ on:
       
 jobs:
   compile-go:
-    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.47
+    uses:  tommzn/github-ci/.github/workflows/go.protobuf.complie.yml@v1.0.48
     secrets:
       cr-pat: ${{ secrets.PUSH_TOKEN }}
       slack-channel: ${{ secrets.SLACK_CHANNEL }}
