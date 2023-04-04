@@ -55,7 +55,7 @@ jobs:
           prerelease: false
           body: "Release ${{ github.ref_name }} (auto generated)"
           token: ${{ secrets.PUSH_TOKEN }}
-          repo: ${{ env.GOLANG_EVENTS_REPO }}
+          repo: "tommzn/de-tommzn-utte-events-go"
       - name: Slack Notify
         if: always()
         uses: rtCamp/action-slack-notify@v2
